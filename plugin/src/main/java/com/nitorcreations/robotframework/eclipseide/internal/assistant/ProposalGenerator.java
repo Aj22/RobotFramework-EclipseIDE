@@ -1,5 +1,5 @@
 /**
- * Copyright 2012 Nitor Creations Oy
+ * Copyright 2012-2013 Nitor Creations Oy
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,9 @@ public class ProposalGenerator implements IProposalGenerator {
     @Override
     public void addVariableProposals(IFile file, ParsedString argument, int documentOffset, List<RobotCompletionProposal> proposals, int maxVariableCharPos, int maxSettingCharPos) {
         IRegion replacementRegion = VariableReplacementRegionCalculator.calculate(argument, documentOffset);
+        ParsedString subArgument = argument.extractRegion(replacementRegion);
         VariableCompletionMatchVisitorProvider visitorProvider = new VariableCompletionMatchVisitorProvider(file, replacementRegion, maxVariableCharPos, maxSettingCharPos);
-        List<RobotCompletionProposal> variableProposals = computeCompletionProposals(file, documentOffset, argument, visitorProvider);
+        List<RobotCompletionProposal> variableProposals = computeCompletionProposals(file, documentOffset, subArgument, visitorProvider);
         if (replacementRegion.getLength() > 0) {
             // the cursor is positioned for replacing a variable, so put the variable proposals first
             proposals.addAll(0, variableProposals);
